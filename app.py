@@ -2,35 +2,20 @@ import streamlit as st
 import json
 from datetime import datetime, timedelta
 from pathlib import Path
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
 
 st.set_page_config(page_title="مدير الاشتراكات", page_icon="📋", layout="wide")
 
-def get_sheet():
-    scope = ["https://spreadsheets.google.com/feeds",
-             "https://www.googleapis.com/auth/drive"]
-    creds_dict = json.loads(st.secrets["GOOGLE_CREDS"])
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
-    client = gspread.authorize(creds)
-    return client.open("subscriptions_db").sheet1
+DATA_FILE = "data.json"
 
 def load():
-    try:
-        sheet = get_sheet()
-        raw = sheet.cell(1, 1).value
-        if raw:
-            return json.loads(raw)
-    except Exception as e:
-        st.error(f"خطأ في الاتصال: {e}")
+    if Path(DATA_FILE).exists():
+        with open(DATA_FILE,"r",encoding="utf-8") as f:
+            return json.load(f)
     return {"emails": []}
 
 def save(data):
-    try:
-        sheet = get_sheet()
-        sheet.update_cell(1, 1, json.dumps(data, ensure_ascii=False))
-    except Exception as e:
-        st.error(f"خطأ في الحفظ: {e}")
+    with open(DATA_FILE,"w",encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
 
 def days_left(date_str):
     try:
@@ -60,7 +45,11 @@ hr { border-color:#7c3aed33 !important; }
 </style>
 """, unsafe_allow_html=True)
 
-data = load()
+if "data" not in st.session_state:
+    st.session_state.data = load()
+
+data = st.session_state.data
+
 st.markdown("<h1 style='text-align:center;font-size:28px;'>📋 مدير الاشتراكات</h1>", unsafe_allow_html=True)
 
 tab1, tab2, tab3 = st.tabs(["📧 الإيميلات", "🔔 التنبيهات", "➕ إضافة"])
@@ -81,7 +70,6 @@ with tab1:
             if alerts:  badge = f"<span class='badge-red'>⛔ {alerts} منتهي</span>"
             elif warns: badge = f"<span class='badge-yellow'>⚠️ {warns} قريب</span>"
             else:       badge = f"<span class='badge-green'>✅ نشط</span>"
-
             with st.expander(f"📧 {em['email']}   —   {len(clients)}/5 زبائن   {badge}"):
                 for ci, c in enumerate(clients):
                     dl = days_left(c.get("end",""))
@@ -99,12 +87,11 @@ with tab1:
                       {"✅ دفع" if c.get("paid")=="نعم" else "❌ لم يدفع"}
                       </span>
                     </div>""", unsafe_allow_html=True)
-                    if st.button("🗑 حذف الزبون", key=f"del_{ei}_{ci}"):
+                    if st.button("🗑 حذف", key=f"del_{ei}_{ci}"):
                         real_ei = next(i for i,e in enumerate(data["emails"]) if e["email"]==em["email"])
                         data["emails"][real_ei]["clients"].pop(ci)
                         save(data); st.rerun()
                     st.markdown("---")
-
                 if len(clients) < 5:
                     st.markdown("**➕ إضافة زبون:**")
                     c1,c2,c3 = st.columns(3)
@@ -119,10 +106,10 @@ with tab1:
                         if cn:
                             real_ei = next(i for i,e in enumerate(data["emails"]) if e["email"]==em["email"])
                             data["emails"][real_ei]["clients"].append({
-                                "name":cn, "email":ce,
+                                "name":cn,"email":ce,
                                 "start":cs.strftime("%Y-%m-%d"),
                                 "end":ced.strftime("%Y-%m-%d"),
-                                "price":str(cp), "paid":cpaid
+                                "price":str(cp),"paid":cpaid
                             })
                             save(data); st.success("✅ تم"); st.rerun()
                 else:
@@ -139,13 +126,11 @@ with tab2:
         for c in em.get("clients",[]):
             dl = days_left(c.get("end",""))
             if dl <= 0:
-                st.markdown(f"""<div class='alert-red'>⛔ <b>انتهى الاشتراك!</b>
-                الزبون: <b>{c.get("name","")}</b> | {em["email"]} | {c.get("email","")} | {c.get("end","")}</div>""",
-                unsafe_allow_html=True); found = True
+                st.markdown(f"""<div class='alert-red'>⛔ <b>انتهى!</b> {c.get("name","")} | {em["email"]} | {c.get("end","")}</div>""", unsafe_allow_html=True)
+                found = True
             elif dl <= 2:
-                st.markdown(f"""<div class='alert-warn'>⚠️ <b>ينتهي خلال {dl} يوم!</b>
-                الزبون: <b>{c.get("name","")}</b> | {em["email"]} | {c.get("email","")} | {c.get("end","")}</div>""",
-                unsafe_allow_html=True); found = True
+                st.markdown(f"""<div class='alert-warn'>⚠️ <b>ينتهي خلال {dl} يوم!</b> {c.get("name","")} | {em["email"]} | {c.get("end","")}</div>""", unsafe_allow_html=True)
+                found = True
     if not found:
         st.success("✅ كل الاشتراكات بخير!")
 
