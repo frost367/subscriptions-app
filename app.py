@@ -23,150 +23,63 @@ def days_left(date_str):
     except:
         return 0
 
+def short_name(email):
+    return email.split("@")[0][:8]
+
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700;900&display=swap');
+html,body,[class*="css"]{font-family:'Tajawal',sans-serif!important;direction:rtl;}
+.stApp{background:#f0f2f8;}
+.block-container{padding:0.8rem!important;max-width:460px!important;margin:auto;}
 
-html, body, [class*="css"] {
-    font-family: 'Tajawal', sans-serif !important;
-    direction: rtl;
-}
-.stApp { background: #f0f2f8; }
-.block-container { padding: 1rem !important; max-width: 460px !important; margin: auto; }
+.app-header{background:linear-gradient(135deg,#3730a3,#6d28d9);border-radius:20px;padding:18px 20px;margin-bottom:14px;color:white;}
+.app-header h2{color:white!important;margin:0;font-size:21px;}
+.app-header p{color:#c4b5fd;margin:4px 0 0;font-size:13px;}
 
-/* header */
-.app-header {
-    background: linear-gradient(135deg, #3730a3, #6d28d9);
-    border-radius: 20px;
-    padding: 20px;
-    margin-bottom: 16px;
-    color: white;
-    text-align: right;
-}
-.app-header h2 { color: white !important; margin: 0; font-size: 22px; }
-.app-header p  { color: #c4b5fd; margin: 4px 0 0; font-size: 13px; }
+.stTabs [data-baseweb="tab-list"]{background:white;border-radius:14px;padding:5px;gap:4px;box-shadow:0 2px 8px #0001;}
+.stTabs [data-baseweb="tab"]{border-radius:10px;color:#6b7280;font-weight:700;font-size:13px;padding:7px 12px;}
+.stTabs [aria-selected="true"]{background:linear-gradient(135deg,#3730a3,#6d28d9)!important;color:white!important;}
 
-/* tabs */
-.stTabs [data-baseweb="tab-list"] {
-    background: white;
-    border-radius: 14px;
-    padding: 5px;
-    gap: 4px;
-    box-shadow: 0 2px 8px #0001;
-}
-.stTabs [data-baseweb="tab"] {
-    border-radius: 10px;
-    color: #6b7280;
-    font-weight: 700;
-    font-size: 13px;
-    padding: 7px 12px;
-}
-.stTabs [aria-selected="true"] {
-    background: linear-gradient(135deg,#3730a3,#6d28d9) !important;
-    color: white !important;
-}
+.stExpander{background:white!important;border:1.5px solid #ede9fe!important;border-radius:16px!important;margin-bottom:10px!important;box-shadow:0 2px 10px #6d28d909!important;}
+div[data-testid="stExpander"] summary{font-family:Tajawal!important;font-size:14px!important;color:#1e1b4b!important;font-weight:700!important;padding:12px!important;}
 
-/* email card */
-.em-card {
-    background: white;
-    border-radius: 18px;
-    padding: 16px;
-    margin-bottom: 10px;
-    box-shadow: 0 2px 12px #6d28d911;
-    border: 1.5px solid #ede9fe;
-}
+.client-box{background:linear-gradient(135deg,#3730a3,#6d28d9);border-radius:14px;padding:10px 6px;text-align:center;color:white;cursor:pointer;min-height:80px;display:flex;flex-direction:column;justify-content:center;align-items:center;box-shadow:0 4px 12px #6d28d933;}
+.client-box.warn{background:linear-gradient(135deg,#b45309,#d97706);}
+.client-box.danger{background:linear-gradient(135deg,#991b1b,#dc2626);}
+.client-box.empty{background:#f3f4f6;border:2px dashed #d1d5db;color:#9ca3af;box-shadow:none;}
+.client-box b{font-size:13px;display:block;margin-bottom:4px;}
+.client-box span{font-size:11px;opacity:0.9;}
 
-/* client card */
-.cl-card {
-    background: #fafafa;
-    border-radius: 14px;
-    padding: 13px 15px;
-    margin: 8px 0;
-    border: 1.5px solid #ede9fe;
-    box-shadow: 0 1px 6px #0001;
-}
+.info-popup{background:white;border-radius:18px;padding:20px;border:1.5px solid #ede9fe;box-shadow:0 4px 20px #6d28d922;margin-top:10px;}
+.info-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f3f4f6;font-size:14px;color:#374151;}
+.info-row:last-child{border-bottom:none;}
+.info-label{color:#9ca3af;font-size:13px;}
 
-/* badges */
-.b-green  { background:#dcfce7; color:#166534; padding:3px 12px; border-radius:20px; font-size:12px; font-weight:700; }
-.b-yellow { background:#fef9c3; color:#854d0e; padding:3px 12px; border-radius:20px; font-size:12px; font-weight:700; }
-.b-red    { background:#fee2e2; color:#991b1b; padding:3px 12px; border-radius:20px; font-size:12px; font-weight:700; }
+.alert-r{background:#fff1f2;border:2px solid #fca5a5;border-radius:14px;padding:14px;margin:8px 0;color:#991b1b;}
+.alert-w{background:#fffbeb;border:2px solid #fcd34d;border-radius:14px;padding:14px;margin:8px 0;color:#92400e;}
 
-/* alert boxes */
-.alert-r { background:#fff1f2; border:2px solid #fca5a5; border-radius:14px; padding:14px; margin:8px 0; color:#991b1b; }
-.alert-w { background:#fffbeb; border:2px solid #fcd34d; border-radius:14px; padding:14px; margin:8px 0; color:#92400e; }
-
-/* buttons */
-.stButton>button {
-    background: linear-gradient(135deg,#3730a3,#6d28d9) !important;
-    color: white !important;
-    border: none !important;
-    border-radius: 14px !important;
-    font-weight: 700 !important;
-    font-size: 15px !important;
-    padding: 12px !important;
-    width: 100% !important;
-    font-family: Tajawal !important;
-    box-shadow: 0 4px 14px #6d28d933 !important;
-}
-.stButton>button:hover { opacity: 0.92; transform: translateY(-1px); }
-
-/* inputs */
-.stTextInput input, .stNumberInput input, .stDateInput input {
-    background: white !important;
-    color: #1e1b4b !important;
-    border: 1.5px solid #ddd6fe !important;
-    border-radius: 12px !important;
-    font-family: Tajawal !important;
-    font-size: 15px !important;
-    padding: 10px !important;
-    box-shadow: 0 1px 4px #0001 !important;
-}
-.stTextInput input:focus { border-color: #6d28d9 !important; }
-
-label { color: #4b5563 !important; font-family: Tajawal !important; font-size: 14px !important; font-weight: 600 !important; }
-
-/* expander */
-.stExpander {
-    background: white !important;
-    border: 1.5px solid #ede9fe !important;
-    border-radius: 16px !important;
-    margin-bottom: 10px !important;
-    box-shadow: 0 2px 10px #6d28d909 !important;
-}
-div[data-testid="stExpander"] summary {
-    font-family: Tajawal !important;
-    font-size: 15px !important;
-    color: #1e1b4b !important;
-    font-weight: 700 !important;
-    padding: 12px !important;
-}
-
-/* search */
-.stTextInput input[placeholder*="بحث"] {
-    background: white !important;
-    border-radius: 14px !important;
-    padding-right: 14px !important;
-}
-
-hr { border-color: #ede9fe !important; margin: 10px 0 !important; }
-.stSuccess { background:#f0fdf4 !important; border:1.5px solid #86efac !important; border-radius:12px !important; color:#166534 !important; }
-.stError   { background:#fff1f2 !important; border:1.5px solid #fca5a5 !important; border-radius:12px !important; color:#991b1b !important; }
-.stWarning { background:#fffbeb !important; border:1.5px solid #fcd34d !important; border-radius:12px !important; color:#92400e !important; }
-.stInfo    { background:#eff6ff !important; border:1.5px solid #93c5fd !important; border-radius:12px !important; color:#1e40af !important; }
+.stButton>button{background:linear-gradient(135deg,#3730a3,#6d28d9)!important;color:white!important;border:none!important;border-radius:14px!important;font-weight:700!important;font-size:15px!important;padding:12px!important;width:100%!important;font-family:Tajawal!important;box-shadow:0 4px 14px #6d28d933!important;}
+.stTextInput input,.stNumberInput input,.stDateInput input{background:white!important;color:#1e1b4b!important;border:1.5px solid #ddd6fe!important;border-radius:12px!important;font-family:Tajawal!important;font-size:15px!important;padding:10px!important;}
+.stTextarea textarea{background:white!important;color:#1e1b4b!important;border:1.5px solid #ddd6fe!important;border-radius:12px!important;font-family:Tajawal!important;font-size:14px!important;}
+label{color:#4b5563!important;font-family:Tajawal!important;font-size:14px!important;font-weight:600!important;}
+hr{border-color:#ede9fe!important;margin:10px 0!important;}
 </style>
 """, unsafe_allow_html=True)
 
 if "data" not in st.session_state:
     st.session_state.data = load()
-data = st.session_state.data
+if "selected" not in st.session_state:
+    st.session_state.selected = None  # (ei, ci)
 
-# header
-today_str = datetime.today().strftime("%A، %d %B %Y")
+data = st.session_state.data
+today_str = datetime.today().strftime("%d/%m/%Y")
 total_clients = sum(len(e.get("clients",[])) for e in data.get("emails",[]))
+
 st.markdown(f"""
 <div class="app-header">
   <h2>📋 مدير الاشتراكات</h2>
-  <p>📅 {today_str} &nbsp;·&nbsp; 👥 {total_clients} زبون نشط</p>
+  <p>📅 {today_str} &nbsp;·&nbsp; 👥 {total_clients} زبون</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -174,120 +87,144 @@ tab1, tab2, tab3 = st.tabs(["📧  الإيميلات", "🔔  تنبيهات", 
 
 # ══════════════════════════════════
 with tab1:
-    search = st.text_input("", placeholder="🔍  ابحث عن إيميل أو زبون...")
+    search = st.text_input("", placeholder="🔍 ابحث عن إيميل...")
     emails_list = data.get("emails", [])
     if search:
-        emails_list = [e for e in emails_list
-                       if search.lower() in e["email"].lower()
-                       or any(search.lower() in c.get("email","").lower() for c in e.get("clients",[]))]
+        emails_list = [e for e in emails_list if search.lower() in e["email"].lower()]
 
     if not emails_list:
         st.info("لا توجد إيميلات — أضف من تبويب ➕")
-    else:
-        for ei, em in enumerate(emails_list):
-            clients = em.get("clients", [])
-            dl_list = [days_left(c.get("end","")) for c in clients]
-            min_dl  = min(dl_list) if dl_list else 999
 
-            if any(d <= 0 for d in dl_list):        icon = "🔴"
-            elif any(0 < d <= 2 for d in dl_list):  icon = "🟡"
-            else:                                    icon = "🟢"
+    for ei, em in enumerate(emails_list):
+        clients = em.get("clients", [])
+        dl_list = [days_left(c.get("end","")) for c in clients]
 
-            days_txt = f"⏳ {min_dl} يوم" if clients else "فارغ"
-            label = f"{icon}  {em['email']}   ·   {len(clients)}/5   ·   {days_txt}"
+        if any(d <= 0 for d in dl_list):        icon = "🔴"
+        elif any(0 < d <= 2 for d in dl_list):  icon = "🟡"
+        elif clients:                            icon = "🟢"
+        else:                                    icon = "⚪"
 
-            with st.expander(label):
-                st.caption(f"🛠 {em.get('service','—')}   |   📅 بداية الاشتراك: {em.get('start','—')}")
+        min_dl = min(dl_list) if dl_list else 0
+        label  = f"{icon}  {em['email']}   ·   {len(clients)}/5   ·   ⏳{min_dl} يوم"
 
-                if not clients:
-                    st.caption("— لا يوجد زبائن بعد —")
-
-                for ci, c in enumerate(clients):
-                    dl = days_left(c.get("end",""))
-                    if dl <= 0:
-                        badge_html = "<span class='b-red'>⛔ منتهي</span>"
-                        border_color = "#ef4444"
-                    elif dl <= 2:
-                        badge_html = f"<span class='b-yellow'>⚠️ {dl} يوم</span>"
-                        border_color = "#f59e0b"
+        with st.expander(label):
+            # ── 5 boxes grid ──────────────────────────
+            cols = st.columns(5)
+            for slot in range(5):
+                with cols[slot]:
+                    if slot < len(clients):
+                        c   = clients[slot]
+                        dl  = days_left(c.get("end",""))
+                        cls = "danger" if dl<=0 else ("warn" if dl<=2 else "")
+                        box_label = short_name(c.get("email", c.get("name","?")))
+                        st.markdown(f"""
+<div class="client-box {cls}">
+  <b>{box_label}</b>
+  <span>{dl}d</span>
+</div>""", unsafe_allow_html=True)
+                        if st.button("⬆", key=f"open_{ei}_{slot}", help="عرض التفاصيل"):
+                            if st.session_state.selected == (ei, slot):
+                                st.session_state.selected = None
+                            else:
+                                st.session_state.selected = (ei, slot)
                     else:
-                        badge_html = f"<span class='b-green'>✅ {dl} يوم</span>"
-                        border_color = "#6d28d9"
-
-                    paid_icon = "✅ دفع" if c.get("paid") == "نعم" else "❌ لم يدفع"
-
-                    st.markdown(f"""
-<div class="cl-card" style="border-right:4px solid {border_color};">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-    <span style="font-weight:700;font-size:15px;color:#1e1b4b;">👤 {c.get('name','—')}</span>
-    {badge_html}
-  </div>
-  <div style="color:#6b7280;font-size:13px;line-height:2.2;">
-    📧&nbsp; {c.get('email','—')}<br>
-    📅&nbsp; {c.get('start','—')} &nbsp;←&nbsp; {c.get('end','—')}<br>
-    💰&nbsp; {c.get('price','—')} دج &nbsp;&nbsp;·&nbsp;&nbsp; {paid_icon}
-  </div>
+                        st.markdown("""
+<div class="client-box empty">
+  <b>+</b>
+  <span>فارغ</span>
 </div>""", unsafe_allow_html=True)
 
-                    if st.button(f"🗑  حذف  {c.get('name','')}", key=f"del_{ei}_{ci}"):
+            # ── popup detail ──────────────────────────
+            sel = st.session_state.selected
+            if sel and sel[0] == ei and sel[1] < len(clients):
+                ci = sel[1]
+                c  = clients[ci]
+                dl = days_left(c.get("end",""))
+
+                if dl <= 0:   status = "⛔ منتهي";      scol = "#dc2626"
+                elif dl <= 2: status = f"⚠️ {dl} يوم";   scol = "#d97706"
+                else:         status = f"✅ {dl} يوم";   scol = "#16a34a"
+
+                st.markdown(f"""
+<div class="info-popup">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+    <span style="font-weight:900;font-size:16px;color:#1e1b4b;">👤 {c.get('email','—').split('@')[0]}</span>
+    <span style="color:{scol};font-weight:700;font-size:14px;">{status}</span>
+  </div>
+  <div class="info-row"><span class="info-label">📧 الإيميل</span><span>{c.get('email','—')}</span></div>
+  <div class="info-row"><span class="info-label">📅 البداية</span><span>{c.get('start','—')}</span></div>
+  <div class="info-row"><span class="info-label">📅 النهاية</span><span>{c.get('end','—')}</span></div>
+  <div class="info-row"><span class="info-label">💰 السعر</span><span>{c.get('price','—')} دج</span></div>
+  <div class="info-row"><span class="info-label">💳 الدفع</span><span>{'✅ دفع' if c.get('paid')=='نعم' else '❌ لم يدفع'}</span></div>
+</div>""", unsafe_allow_html=True)
+
+                # notes
+                note_key = f"note_{ei}_{ci}"
+                current_note = c.get("note","")
+                new_note = st.text_area("📝 ملاحظة", value=current_note, key=note_key,
+                                        placeholder="أضف ملاحظة هنا...", height=80)
+                bcol1, bcol2 = st.columns(2)
+                with bcol1:
+                    if st.button("💾 حفظ الملاحظة", key=f"savenote_{ei}_{ci}"):
+                        ri = next(i for i,e in enumerate(data["emails"]) if e["email"]==em["email"])
+                        data["emails"][ri]["clients"][ci]["note"] = new_note
+                        save(data); st.session_state.data = data
+                        st.success("✅ تم حفظ الملاحظة")
+                with bcol2:
+                    if st.button("🗑 حذف الزبون", key=f"del_{ei}_{ci}"):
                         ri = next(i for i,e in enumerate(data["emails"]) if e["email"]==em["email"])
                         data["emails"][ri]["clients"].pop(ci)
-                        save(data); st.session_state.data = data; st.rerun()
+                        save(data); st.session_state.data = data
+                        st.session_state.selected = None; st.rerun()
 
-                st.divider()
-                if len(clients) < 5:
-                    st.markdown("**➕ إضافة زبون جديد**")
-                    cn    = st.text_input("👤 اسم الزبون",    key=f"cn_{ei}")
-                    ce    = st.text_input("📧 إيميل الزبون",  key=f"ce_{ei}")
-                    cp    = st.number_input("💰 السعر (دج)", min_value=0, key=f"cp_{ei}")
-                    cs    = st.date_input("📅 البداية",  key=f"cs_{ei}",  value=datetime.today())
-                    ced   = st.date_input("📅 النهاية",  key=f"ced_{ei}", value=datetime.today()+timedelta(days=30))
-                    cpaid = st.radio("💳 هل دفع؟", ["نعم","لا"], key=f"cpaid_{ei}", horizontal=True)
-                    if st.button("✅  إضافة الزبون", key=f"addcl_{ei}"):
-                        if cn.strip():
-                            ri = next(i for i,e in enumerate(data["emails"]) if e["email"]==em["email"])
-                            data["emails"][ri]["clients"].append({
-                                "name":cn.strip(), "email":ce.strip(),
-                                "start":cs.strftime("%Y-%m-%d"),
-                                "end":ced.strftime("%Y-%m-%d"),
-                                "price":str(cp), "paid":cpaid
-                            })
-                            save(data); st.session_state.data = data
-                            st.success("✅ تم إضافة الزبون!"); st.rerun()
-                        else:
-                            st.error("أدخل اسم الزبون!")
-                else:
-                    st.warning("⚠️ الحد الأقصى 5 زبائن لهذا الإيميل")
+            st.divider()
 
-                st.divider()
-                if st.button("🗑  حذف هذا الإيميل كاملاً", key=f"demail_{ei}"):
-                    ri = next(i for i,e in enumerate(data["emails"]) if e["email"]==em["email"])
-                    data["emails"].pop(ri)
-                    save(data); st.session_state.data = data; st.rerun()
+            # ── add client ────────────────────────────
+            if len(clients) < 5:
+                st.markdown("**➕ إضافة زبون**")
+                ce  = st.text_input("📧 إيميل الزبون", key=f"ce_{ei}", placeholder="client@gmail.com")
+                cp  = st.number_input("💰 السعر (دج)", min_value=0, key=f"cp_{ei}")
+                cs  = st.date_input("📅 البداية",  key=f"cs_{ei}",  value=datetime.today())
+                ced = st.date_input("📅 النهاية",  key=f"ced_{ei}", value=datetime.today()+timedelta(days=30))
+                cpaid = st.radio("💳 هل دفع؟", ["نعم","لا"], key=f"cpaid_{ei}", horizontal=True)
+                if st.button("✅ إضافة", key=f"addcl_{ei}"):
+                    if ce.strip():
+                        ri = next(i for i,e in enumerate(data["emails"]) if e["email"]==em["email"])
+                        data["emails"][ri]["clients"].append({
+                            "email":ce.strip(), "name":ce.strip().split("@")[0],
+                            "start":cs.strftime("%Y-%m-%d"),
+                            "end":ced.strftime("%Y-%m-%d"),
+                            "price":str(cp), "paid":cpaid, "note":""
+                        })
+                        save(data); st.session_state.data = data
+                        st.success("✅ تم!"); st.rerun()
+                    else:
+                        st.error("أدخل إيميل الزبون!")
+            else:
+                st.warning("⚠️ الحد الأقصى 5 زبائن")
+
+            st.divider()
+            if st.button("🗑 حذف هذا الإيميل", key=f"demail_{ei}"):
+                ri = next(i for i,e in enumerate(data["emails"]) if e["email"]==em["email"])
+                data["emails"].pop(ri)
+                save(data); st.session_state.data = data
+                st.session_state.selected = None; st.rerun()
 
 # ══════════════════════════════════
 with tab2:
     st.markdown("### 🔔 التنبيهات")
     found = False
-    for em in data.get("emails", []):
-        for c in em.get("clients", []):
+    for em in data.get("emails",[]):
+        for c in em.get("clients",[]):
             dl = days_left(c.get("end",""))
             if dl <= 0:
-                st.markdown(f"""<div class="alert-r">
-⛔ <b>انتهى الاشتراك!</b><br>
-👤 {c.get('name','')} &nbsp;|&nbsp; 📧 {em['email']}<br>
-📅 انتهى في: <b>{c.get('end','')}</b>
-</div>""", unsafe_allow_html=True)
+                st.markdown(f"""<div class="alert-r">⛔ <b>انتهى!</b> &nbsp; {c.get('email','')} &nbsp;|&nbsp; 📧 {em['email']} &nbsp;|&nbsp; 📅 {c.get('end','')}</div>""", unsafe_allow_html=True)
                 found = True
             elif dl <= 2:
-                st.markdown(f"""<div class="alert-w">
-⚠️ <b>ينتهي خلال {dl} يوم!</b><br>
-👤 {c.get('name','')} &nbsp;|&nbsp; 📧 {em['email']}<br>
-📅 ينتهي في: <b>{c.get('end','')}</b>
-</div>""", unsafe_allow_html=True)
+                st.markdown(f"""<div class="alert-w">⚠️ <b>ينتهي خلال {dl} يوم!</b> &nbsp; {c.get('email','')} &nbsp;|&nbsp; 📧 {em['email']} &nbsp;|&nbsp; 📅 {c.get('end','')}</div>""", unsafe_allow_html=True)
                 found = True
     if not found:
-        st.success("✅ كل الاشتراكات بخير! لا توجد تنبيهات.")
+        st.success("✅ كل الاشتراكات بخير!")
 
 # ══════════════════════════════════
 with tab3:
@@ -296,13 +233,13 @@ with tab3:
     new_pass  = st.text_input("🔑 كلمة المرور", type="password")
     new_serv  = st.text_input("🛠 اسم الخدمة",  placeholder="Netflix / Spotify ...")
     new_start = st.date_input("📅 تاريخ بداية الاشتراك السنوي", value=datetime.today())
-    if st.button("💾  حفظ الإيميل"):
+    if st.button("💾 حفظ الإيميل"):
         if new_email.strip():
             if any(e["email"]==new_email.strip() for e in data["emails"]):
                 st.error("⚠️ هذا الإيميل موجود مسبقاً!")
             else:
                 data["emails"].append({
-                    "email":    new_email.strip(),
+                    "email":   new_email.strip(),
                     "password": new_pass,
                     "service":  new_serv,
                     "start":    new_start.strftime("%Y-%m-%d"),
