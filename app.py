@@ -253,7 +253,7 @@ with main_tab2:
     
 p1,p2,p3,p4=st.tabs(["📦 المنتجات","🧾 مبيعات اليوم","📊 الشهري","➕ منتج"])
 
-    with p1:
+with p1:
         st.markdown("### 📦 قائمة المنتجات")
         prods=pdata.get("products",[])
         if not prods: st.info("لا توجد منتجات — أضف من تبويب ➕")
