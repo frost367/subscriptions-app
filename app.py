@@ -335,4 +335,4 @@ with main_tab2:
         st.markdown("---")
         st.markdown("#### 📋 مبيعات اليوم")
         tds = datetime.today().strftime("%Y-%m-%d")
-        tdsl = [s for s in pdat
+        tdsl = [s for s in pdat]
