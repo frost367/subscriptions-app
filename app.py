@@ -250,8 +250,7 @@ with main_tab2:
 <div class="stat-card"><div class="num">{m_rev}</div><div class="lbl">دج إيراد</div></div>
 <div class="stat-card"><div class="num">{m_profit}</div><div class="lbl">دج فائدة</div></div>
 </div></div>""",unsafe_allow_html=True)
-
-    p1,p2,p3,p4=st.tabs(["📦 المنتجات","🧾 مبيعات اليوم","📊 الشهري","➕ منتج"])
+p1,p2,p3,p4=st.tabs(["📦 المنتجات","🧾 مبيعات اليوم","📊 الشهري","➕ منتج"])
 
     with p1:
         st.markdown("### 📦 قائمة المنتجات")
