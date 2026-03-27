@@ -335,4 +335,50 @@ with main_tab2:
         st.markdown("---")
         st.markdown("#### 📋 مبيعات اليوم")
         tds = datetime.today().strftime("%Y-%m-%d")
-        tdsl = [s for s in pdat]
+        tdsl = [s for s in pdata.get("sales",[]) if s.get("date","")==tds]
+        if not tdsl:
+            st.info("لا توجد مبيعات اليوم")
+        for s in tdsl:
+            rv = s.get("sell_price",0) * s.get("qty",1)
+            pr = (s.get("sell_price",0) - s.get("cost_price",0)) * s.get("qty",1)
+            st.markdown(f'<div style="background:white;border-radius:12px;padding:10px 14px;margin:5px 0;border:1.5px solid #d1fae5;font-size:13px;display:flex;justify-content:space-between;"><span>📦 {s.get("product","")} × {s.get("qty",1)}</span><span style="color:#065f46;font-weight:700;">{rv} دج | +{pr} دج</span></div>', unsafe_allow_html=True)
+
+    with p3:
+        st.markdown("### 📊 ملخص شهري")
+        ams = sorted(set(s.get("date","")[:7] for s in pdata.get("sales",[])), reverse=True)
+        if not ams:
+            st.info("لا توجد بيانات بعد")
+        for m in ams:
+            ms = [s for s in pdata.get("sales",[]) if s.get("date","").startswith(m)]
+            mr = sum(s.get("sell_price",0)*s.get("qty",1) for s in ms)
+            mc = sum(s.get("cost_price",0)*s.get("qty",1) for s in ms)
+            mq = sum(s.get("qty",1) for s in ms)
+            mpr = mr - mc
+            st.markdown(f"""<div class="green-card">
+<div style="font-weight:700;color:#065f46;font-size:15px;margin-bottom:8px;">📅 {m}</div>
+<div class="month-stats">
+<div class="m-stat" style="background:#ecfdf5;"><div style="font-size:17px;font-weight:900;color:#065f46;">{mq}</div><div style="font-size:10px;color:#059669;">مباع</div></div>
+<div class="m-stat" style="background:#ecfdf5;"><div style="font-size:17px;font-weight:900;color:#065f46;">{mr}</div><div style="font-size:10px;color:#059669;">دج إيراد</div></div>
+<div class="m-stat" style="background:#ecfdf5;"><div style="font-size:17px;font-weight:900;color:#065f46;">{mpr}</div><div style="font-size:10px;color:#059669;">دج فائدة</div></div>
+</div></div>""", unsafe_allow_html=True)
+
+    with p4:
+        st.markdown("### ➕ إضافة منتج جديد")
+        pn = st.text_input("📦 اسم المنتج", placeholder="Netflix 1 شهر")
+        pc = st.number_input("💸 سعر التكلفة (دج)", min_value=0, key="pc")
+        ps = st.number_input("💰 سعر البيع (دج)", min_value=0, key="ps")
+        if ps > pc:
+            st.markdown(f'<div class="preview" style="background:#ecfdf5;border:1.5px solid #6ee7b7;"><b style="color:#065f46;font-size:16px;">الفائدة لكل وحدة: {ps-pc} دج ✅</b></div>', unsafe_allow_html=True)
+        if st.button("💾 حفظ المنتج", key="saveprod"):
+            if pn.strip():
+                pdata["products"].append({
+                    "name": pn.strip(),
+                    "cost_price": pc,
+                    "sell_price": ps
+                })
+                save(PROFIT_FILE, pdata)
+                st.session_state.pdata = pdata
+                st.success(f"✅ تم إضافة {pn}")
+                st.rerun()
+            else:
+                st.error("أدخل اسم المنتج!")
